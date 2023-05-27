@@ -1,13 +1,16 @@
 
-# Website development using .Net language
+# Fingerprint System
 
-The program aims to learn the basics of developing web applications using ASP.NET Core MVC.
+It is a console application project for the fingerprint system to log in and out of employees.
 
+#### The Admin can
+- view the users
+- create new ones, as well as be aware of the existing employees
 
+#### The employee can
+- log in and logout
+- view and modify his profile
 
-## Link:
+## ERD
 
- - [About this Bootcamp](https://bootcamp.sa/bootcamp/xQTs5nzCL9/view)
-<!--  - [Awesome README](https://github.com/matiassingers/awesome-readme)
- - [How to write a Good readme](https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project) -->
-
+![ERD](https://github.com/SaraSaeed1/Tuwaiq_DotNetDeveloper/blob/master/Project/FingerprintProject/Database%20Design%20(3).png)
