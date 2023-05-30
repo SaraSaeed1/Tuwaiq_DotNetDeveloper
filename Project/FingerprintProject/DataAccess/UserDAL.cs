@@ -1,4 +1,4 @@
-﻿using FingerprintProject.Entity;
+using FingerprintProject.Entity;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -15,6 +15,7 @@ namespace FingerprintProject.DataAccess
         public string connectionString;
 
         public UserDAL()
+        
         {
             connectionString = ConfigurationManager.ConnectionStrings["Fingerprint"].ConnectionString;
         }
