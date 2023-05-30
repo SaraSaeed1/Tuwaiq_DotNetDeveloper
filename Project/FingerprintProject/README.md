@@ -17,7 +17,7 @@ It is a console application project for the fingerprint system to log in and out
 
 ![ERD](https://github.com/SaraSaeed1/Tuwaiq_DotNetDeveloper/blob/master/Project/FingerprintProject/Database%20Design%20(3).png)
 
-## Devlobed by:
+### Devlobed by:
 - Sara Alghamdi
 - Afnan Alshammari
 - Hasa Alsukait
