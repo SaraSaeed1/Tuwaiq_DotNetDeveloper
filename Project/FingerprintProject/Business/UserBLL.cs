@@ -1,4 +1,4 @@
-﻿using FingerprintProject.DataAccess;
+using FingerprintProject.DataAccess;
 using FingerprintProject.Entity;
 using System;
 using System.Collections.Generic;
@@ -10,9 +10,13 @@ namespace FingerprintProject.Business
 {
     public class UserBLL
     {
-        public List<User> GetAllUser()
-        {
-            return new UserDAL().GetAllUser();
+        public void GetAllUser()
+        {   var users= new UserDAL().GetAllUser();
+            users.ForEach(item =>
+                        {
+                            var categoryName = item.CategoryId == 1 ? "Admin " : "Employee";
+                            Console.WriteLine("Name:" + item.Name + "  |  Category:" + categoryName);
+                        });
         }
         public User GetUser(int _id)
         {
