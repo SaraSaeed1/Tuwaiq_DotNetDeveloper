@@ -1,4 +1,4 @@
-﻿using FingerprintProject.DataAccess;
+using FingerprintProject.DataAccess;
 using FingerprintProject.Entity;
 using System;
 using System.Collections.Generic;
@@ -10,9 +10,19 @@ namespace FingerprintProject.Business
 {
     public class FingerprintBLL
     {
-        public List<Fingerprint> GetAllEmployee()
+        public void GetAllEmployee()
         {
-            return new FingerprintDAL().GetAllFingerprint();
+            var employeeLogin=  new FingerprintDAL().GetAllFingerprint();
+            Console.WriteLine("\n--------------------------------------------         Employee LogIn      --------------------------------------------");
+            employeeLogin.ForEach(item =>
+            {
+                var employeeInfo = new UserBLL().GetUser(item.UserId);
+                string log = item.IsLoggedIn == 1 ? "Yes " : "No";
+                if (item.IsLoggedIn == 1)
+                {
+                    Console.WriteLine("Name:" + employeeInfo.Name + "  |  Logged in  :" + log + "  |  Login Time:" + item.LoginTime + "  |  Logout Time:" + item.LogoutTime + "  |  Total Time:" + item.Totalhours);
+                }
+            });
         }
         public Fingerprint GetEmployee(int _id)
         {
