@@ -1,4 +1,4 @@
-﻿using FingerprintProject.Business;
+using FingerprintProject.Business;
 using FingerprintProject.Entity;
 using System;
 using System.Collections.Generic;
@@ -16,13 +16,12 @@ namespace FingerprintProject
             Console.WriteLine("1-Admin");
             Console.WriteLine("2-Employee");
             int input = int.Parse(Console.ReadLine());
-            //var input = Console.ReadLine();
             return input;
         }
         public void helloUser(User user,string message)
         {
             Console.WriteLine("\n#########   Hello " + user.Name + "   ###########");
-            Console.WriteLine("-------"+ message+ "-------\n");
+            Console.WriteLine("------------"+ message+ "--------------\n");//This message shows the user whether he is logged in or not
         }
         public int adminMenu()
         {
@@ -53,18 +52,12 @@ namespace FingerprintProject
             return id;
         }
 
-        public int login(int _id)
-        {
-            return _id;
-        }
     }
     class Program
     {
-    public static readonly CRUD operation = CRUD.Instance;
         static void Main(string[] args)
         {
             choices choice = new choices();
-            //User user = new User();
             string answer;
 
             Console.WriteLine("##########################################################################");
@@ -73,78 +66,63 @@ namespace FingerprintProject
 
             do
             {
-                var category = choice.start();
-                switch (category)
+                //var category = choice.start();
+                switch (choice.start())//admin or employee?
                 {
                     case 1:
-                        var id = choice.login();
-                        var user = new UserBLL().GetUser(id);
-                        var finger = new FingerprintBLL().GetEmployee(user.Id);
-                        string message = finger.IsLoggedIn == 1 ? "Logged in" : "You aren't logged in";
-                        choice.helloUser(user, message);
-                        var adminInput = choice.adminMenu();
-                        var loopContinue = true;
-                        while(loopContinue){
-                            switch (adminInput)
-                            {
-                                case 1://login
-                                    new FingerprintBLL().login(user.Id);
-                                    loopContinue = true;
-                                    break;
-                                case 2://List of Employee
-                                    List<User> employeeList = new UserBLL().GetAllUser();
+                        var id = choice.login(); //take the id for user
+                        var user = new UserBLL().GetUser(id); //get user by id
+                        if (user.CategoryId==1) //If the user is an admin, he can go to the admin menu, if he is not an admin, he can go to the main menu
+                        {
+                            var finger = new FingerprintBLL().GetEmployee(user.Id); //to view for user is he logged in or not
+                            string message = finger.IsLoggedIn == 1 ? "Logged in" : "You are logged out";
+                            choice.helloUser(user, message);
+                            var adminInput = choice.adminMenu();
+                            var loopContinue = true;
+                            while(loopContinue){
+                                switch (adminInput)
+                                {
+                                    case 1://login
+                                        new FingerprintBLL().login(user.Id);
+                                        loopContinue = true;
+                                        break;
+                                    case 2://List of Employee
+                                        Console.WriteLine("-------------------------List of Employee------------------------ \n");
+                                        new UserBLL().GetAllUser();
+                                        Console.WriteLine("------------------------------------------------------------------ \n");
+                                        loopContinue = true;
+                                        break;
+                                    case 3://List of Login Employee
+                                        new FingerprintBLL().GetAllEmployee();
+                                        Console.WriteLine("----------------------------------------------------------------------------------------------------------------------- \n");
+                                        loopContinue = true;
+                                        break;
+                                    case 4://Create User
                                     Console.WriteLine("-------------------------------------------------");
-                                    employeeList.ForEach(item =>
-                                    {
-                                        string categoryName = item.CategoryId == 1 ? "Admin " : "Employee";
-                                        Console.WriteLine("Name:" + item.Name + "  |  Category:" + categoryName);
-                                    });
-                                    Console.WriteLine("------------------------------------------------- \n \n");
-                                    loopContinue = true;
-                                    break;
-                                case 3://List of Login Employee
-                                    List<Fingerprint> employeeLogin = new FingerprintBLL().GetAllEmployee();
-                                    Console.WriteLine("\n--------------------------------------------         Employee LogIn      --------------------------------------------");
-                                    employeeLogin.ForEach(item =>
-                                    {
-                                        var employeeInfo = new UserBLL().GetUser(item.UserId);
-                                        string log = item.IsLoggedIn == 1 ? "Yes " : "No";
-                                        if (item.IsLoggedIn == 1)
-                                        {
-                                            Console.WriteLine("Name:" + employeeInfo.Name + "  |  Logged in  :" + log + "  |  Login Time:" + item.LoginTime + "  |  Logout Time:" + item.LogoutTime);
-                                        }
-                                        // else
-                                        // {
-                                        //     Console.WriteLine("\n \n--------------------------------------------         Employee Logout      --------------------------------------------");
-                                        //     Console.WriteLine("Name |" + employeeInfo.Name + "   Logged in  | " + log + "   Login Time  | " + item.LoginTime + "   Logout Time  | " + item.LogoutTime);
-                                        // }
-                                    });
-                                    Console.WriteLine("----------------------------------------------------------------------------------------------------------------------- \n \n");
-                                    loopContinue = true;
-                                    break;
-                                case 4://Create User
-                                Console.WriteLine("-------------------------------------------------");
-                                    Console.WriteLine("Enter Name:");
-                                    var name = Console.ReadLine();
-                                    Console.WriteLine("Enter Category 1 for admin and 2 for employee");
-                                    var categoryId = Convert.ToInt32(Console.ReadLine());
-                                    new UserBLL().CreateUser(name,categoryId);
-                                    loopContinue = true;
-                                    break;
-                                case 5://logout
-                                    new FingerprintBLL().logout(user.Id);
-                                    loopContinue = false;
-                                    break;
-                                default:
-                                    loopContinue = true;
-                                    Console.WriteLine("\n Please enter the valid choice");
-                                    break;
-                            }
-                            if(loopContinue){
-                                adminInput = choice.adminMenu();
+                                        Console.WriteLine("Enter Name:");
+                                        var name = Console.ReadLine();
+                                        Console.WriteLine("Enter Category 1 for admin and 2 for employee");
+                                        var categoryId = Convert.ToInt32(Console.ReadLine());
+                                        new UserBLL().CreateUser(name,categoryId);
+                                        loopContinue = true;
+                                        break;
+                                    case 5://logout
+                                        new FingerprintBLL().logout(user.Id);
+                                        loopContinue = false;
+                                        break;
+                                    default:
+                                        loopContinue = true;
+                                        Console.WriteLine("\n Please enter the valid choice");
+                                        break;
+                                }
+                                if(loopContinue){
+                                    adminInput = choice.adminMenu();
+                                }
                             }
                         }
-
+                        else{
+                            Console.WriteLine("You're not admin please try again");
+                        }
                         break;
                     case 2:
                         var idemployee = choice.login();
